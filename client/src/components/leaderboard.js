@@ -14,12 +14,12 @@ class Leaderboard extends Component {
   }
 
   generateRow = (obj, index) => { // generates a row in the table
-    console.log(obj);
+    // let color = (obj.name === this.props.client) ? 'blue' : 'red';
     return ( // returns a row element
-      <Table.Row key={index}>
-        <Table.Cell>{index + 1}</Table.Cell>
-        <Table.Cell>{obj.name}</Table.Cell>
-        <Table.Cell>{obj.score}</Table.Cell>
+      <Table.Row key={index} positive={(obj.name === this.props.client)}>
+        <Table.Cell positive={(obj.name === this.props.client)}>{index + 1}</Table.Cell>
+        <Table.Cell positive={(obj.name === this.props.client)}>{obj.name}</Table.Cell>
+        <Table.Cell positive={(obj.name === this.props.client)}>{obj.score}</Table.Cell>
       </Table.Row>
     )
   }
