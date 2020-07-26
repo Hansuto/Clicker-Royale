@@ -4,10 +4,10 @@ import {
   Grid,
   Segment,
   Button,
+  Header,
   Modal,
   Input,
 } from 'semantic-ui-react';
-import Head from './components/head';
 import Leaderboard from './components/leaderboard';
 import socketIOClient from "socket.io-client";
 
@@ -55,17 +55,20 @@ class App extends Component {
 
     socket.on("update", data => {
       var response = JSON.parse(data);
-      console.log(response);
+      // console.log(response);
 
       var timeLeft = response.timeLeft;
       var gameInProgress = response.gameInProgress;
       var leaderboard = response.leaderboard;
       var lastWinner = response.winner;
-      var myScore;
+      var myScore = 0;
 
-      if (leaderboard.length !== 0 && gameInProgress) {
+
+      if (leaderboard.length !== 0) {
         myScore = leaderboard.find(x => x.name === myName).score;
       }
+
+      console.log(myScore);
 
       this.setState({
         gameInProgress: gameInProgress,
@@ -78,12 +81,20 @@ class App extends Component {
   }
 
   render() {
-    const { gameInProgress, timeLeft, myScore, leaderboard, myName, noname, nameOpen } = this.state;
+    const { gameInProgress, timeLeft, myScore, leaderboard, myName, noname, nameOpen, lastWinner } = this.state;
+
+    let notify = (gameInProgress) ? 'Time Remaining: ' : 'Game Starting in: ';
+    let notifyText = notify + timeLeft + ' seconds';
+    let btnTxt = (!gameInProgress && myScore === 0) ? 'Join' : (gameInProgress) ? myScore : notifyText;
     return (
       <Segment className="App">
         <Grid centered className="flex fillHeight">
           <Grid.Row columns='1' className="flexShrink">
-            <Head playing={gameInProgress} time={timeLeft} />
+            <div>
+              <Header textAlign='center' size='huge' color='violet'>Clicker Royal</Header>
+              <Header textAlign='center'>{notifyText}</Header>
+              <Header textAlign='center'>Last Winner: {lastWinner}</Header>
+            </div>
           </Grid.Row>
           <Grid.Row columns='2' className="flexGrow">
             <Grid.Column width='10'>
@@ -93,9 +104,11 @@ class App extends Component {
                 size='massive'
                 className="fillHeight"
                 onClick={this.handleClick}
-                disabled={!gameInProgress || myName === ''}
+                disabled={!gameInProgress && myScore !== 0}
               >
-                {myScore}
+                <Header size='huge' inverted>
+                  {btnTxt}
+                </Header>
               </Button>
             </Grid.Column>
             <Grid.Column width='6'>
