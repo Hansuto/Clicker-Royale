@@ -1,19 +1,24 @@
-// Node.js socket client script
-//172.23.105.241
-const net = require('net');
+var io = require('socket.io-client');
+var socket = io.connect('http://hansuto.ngrok.io');
+const myName = 'Chris'
 
-// Connect to a server @ port 9898
-const client = net.createConnection({ port: 16534, host: '2.tcp.ngrok.io' }, () => {
-		setInterval(function(){
-			client.write('Chris');
-		}, 123);
-});
+setInterval(function(){
+	socket.emit('click', myName);
+}, 1000);
 
-client.on('data', (data) => {
-  console.log(data.toString());
+socket.on('update', (data) => {
+	var response = JSON.parse(data);
+	console.log(response);
+	
+	var timeLeft = response.timeLeft;
+	var gameInProgress = response.gameInProgress;
+	var leaderboard = response.leaderboard;
+	var lastWinner = response.winner;
+	var myScore;
+	
+	if (leaderboard.length != 0 && gameInProgress) {
+		myScore = leaderboard.find(x => x.name === myName).score;
+	}
+	console.log(myScore);
   //client.end();
-});
-
-client.on('end', () => {
-  console.log('CLIENT: disconnected');
 });
