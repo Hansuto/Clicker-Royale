@@ -18,23 +18,37 @@ io.on('connection', function(socket) {
 			leaderboard.push({"name" : data.toString(),"score" : 1,});
 		}
 		
-		setInterval(function(){
-			leaderboard = leaderboard.sort((a, b) => parseFloat(b.score) - parseFloat(a.score));
-			
-			socket.emit("update",
-				JSON.stringify(
-					{
-						gameInProgress: gameInProgress,
-						timeLeft: time,
-						winner: lastWinner,
-						leaderboard: leaderboard
-					}
-				)
-			);
-		}, 1000);
-  });
+		leaderboard = leaderboard.sort((a, b) => parseFloat(b.score) - parseFloat(a.score));
 	
+		io.emit("update",
+			JSON.stringify(
+				{
+					gameInProgress: gameInProgress,
+					timeLeft: time,
+					winner: lastWinner,
+					leaderboard: leaderboard
+				}
+			)
+		);
+  });
 });
+
+
+setInterval(function(){
+	leaderboard = leaderboard.sort((a, b) => parseFloat(b.score) - parseFloat(a.score));
+	
+	io.emit("update",
+		JSON.stringify(
+			{
+				gameInProgress: gameInProgress,
+				timeLeft: time,
+				winner: lastWinner,
+				leaderboard: leaderboard
+			}
+		)
+	);
+}, 1000);
+
 
 setInterval(function(){
 		time -= 1;
