@@ -1,5 +1,23 @@
 .App {
   text-align: center;
+  height: 100vh;
+}
+
+.fillHeight {
+  height: 100%;
+}
+
+.flex {
+  display: flex;
+  flex-direction: column !important;
+}
+
+.flexShrink {
+  flex-shrink: 1;
+}
+
+.flexGrow {
+  flex-grow: 1;
 }
 
 .App-logo {
