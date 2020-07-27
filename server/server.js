@@ -1,4 +1,4 @@
-var io = require('socket.io').listen(8123);
+var io = require('socket.io').listen(process.env.PORT || 8123);
 var time = 30;
 var gameInProgress = true;
 var lastWinner = '';

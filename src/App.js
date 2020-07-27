@@ -15,7 +15,7 @@ import Konami from 'react-konami-code';
 import { toast, ToastContainer  } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const socket = socketIOClient("http://hansuto.ngrok.io/");
+const socket = socketIOClient("http://clicker-royale-server.herokuapp.com");
 
 class App extends Component {
   constructor(props) {
