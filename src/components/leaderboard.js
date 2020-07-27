@@ -16,7 +16,7 @@ class Leaderboard extends Component {
   generateRow = (obj, index) => { // generates a row in the table
     // let color = (obj.name === this.props.client) ? 'blue' : 'red';
     return ( // returns a row element
-      <Table.Row key={index} positive={(obj.name === this.props.client)} onClick={() => this.props.hurt(obj.name)}>
+      <Table.Row key={index} positive={(obj.name === this.props.client)} style={{'cursor': 'pointer'}} onClick={() => this.props.hurt(obj.name)}>
         <Table.Cell positive={(obj.name === this.props.client)}>{index + 1}</Table.Cell>
         <Table.Cell positive={(obj.name === this.props.client)}>{obj.name}</Table.Cell>
         <Table.Cell positive={(obj.name === this.props.client)}>{obj.score}</Table.Cell>

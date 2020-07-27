@@ -116,7 +116,7 @@ class App extends Component {
     let notifyText = notify + timeLeft + ' seconds';
     let btnTxt = (!gameInProgress && myScore === 0) ? 'Join' : (gameInProgress) ? myScore : notifyText;
     return (
-      <Segment className="App" basic>
+      <Segment className="App" style={{'user-select': 'none'}} basic>
         <Grid centered className="flex fillHeight">
           <Grid.Row columns='1' className="flexShrink">
             <div>
@@ -149,6 +149,7 @@ class App extends Component {
           open={nameOpen}
           size='mini'
           closeOnDimmerClick={false}
+          style={{'user-select': 'none'}}
         >
           <Modal.Header>What should we call you?</Modal.Header>
           <Modal.Content>
