@@ -11,6 +11,7 @@ import {
 } from 'semantic-ui-react';
 import Leaderboard from './components/leaderboard';
 import socketIOClient from "socket.io-client";
+import Konami from 'react-konami-code';
 
 const socket = socketIOClient("http://hansuto.ngrok.io/");
 
@@ -26,6 +27,7 @@ class App extends Component {
       lastWinner: '',
       noname: false,
       nameOpen: true,
+      increment: 1,
     }
   }
 
@@ -34,7 +36,7 @@ class App extends Component {
   }
 
   submitName = () => {
-    const { myName } = this.state;
+    const { myName, increment } = this.state;
 
     if (myName === '') {
       this.setState({ noname: true });
@@ -44,25 +46,26 @@ class App extends Component {
       this.updateSocket();
       let data = JSON.stringify({
         name: myName,
-        increment: 1,
+        increment: increment,
       });
       socket.emit('click', data);
     }
   }
 
   handleClick = () => {
-    const { myName } = this.state;
+    const { myName, increment } = this.state;
     let data = JSON.stringify({
       name: myName,
-      increment: 1,
+      increment: increment,
     });
     socket.emit('click', data);
   }
 
   hurt = (name) => {
+    const { increment } = this.state;
     let data = JSON.stringify({
       name: name,
-      increment: -1,
+      increment: -increment,
     });
     socket.emit('click', data);
   }
@@ -99,6 +102,11 @@ class App extends Component {
         lastWinner: lastWinner,
       })
     })
+  }
+
+  easterEgg = () => {
+    console.log('God Mode');
+    this.setState({ increment: 10 });
   }
 
   render() {
@@ -150,6 +158,7 @@ class App extends Component {
             </Form>
           </Modal.Content>
         </Modal>
+        <Konami action={this.easterEgg}></Konami>
       </Segment>
     );
   }
