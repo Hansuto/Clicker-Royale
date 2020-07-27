@@ -15,7 +15,7 @@ import Konami from 'react-konami-code';
 import { toast, ToastContainer  } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const socket = socketIOClient("http://clicker-royale-server.herokuapp.com");
+const socket = socketIOClient("localhost:8123");
 
 class App extends Component {
   constructor(props) {
@@ -27,6 +27,8 @@ class App extends Component {
       myScore: 0,
       myName: '',
       lastWinner: '',
+      hiScore: 0,
+      hiScoreName: '',
       noname: false,
       nameOpen: true,
       increment: 1,
@@ -83,6 +85,8 @@ class App extends Component {
       var gameInProgress = response.gameInProgress;
       var leaderboard = response.leaderboard;
       var lastWinner = response.winner;
+      var hiScore = response.hiScore;
+      var hiScoreName = response.hiScoreName
       var score = 0;
 
 
@@ -102,6 +106,8 @@ class App extends Component {
         leaderboard: leaderboard,
         myScore: score,
         lastWinner: lastWinner,
+        hiScore: hiScore,
+        hiScoreName: hiScoreName
       })
     })
   }
@@ -113,7 +119,7 @@ class App extends Component {
   }
 
   render() {
-    const { gameInProgress, timeLeft, myScore, leaderboard, myName, noname, nameOpen, lastWinner } = this.state;
+    const { gameInProgress, timeLeft, myScore, leaderboard, myName, noname, nameOpen, lastWinner, hiScoreName, hiScore } = this.state;
 
     let notify = (gameInProgress) ? 'Time Remaining: ' : 'Game Starting in: ';
     let notifyText = notify + timeLeft + ' seconds';
@@ -126,6 +132,7 @@ class App extends Component {
               <Header textAlign='center' size='huge' color='violet'>Clicker Royale</Header>
               <Header textAlign='center'>{notifyText}</Header>
               <Header textAlign='center'>Last Winner: <Label basic color='purple' size='large'>{lastWinner}</Label></Header>
+              <Header textAlign='center'>High Score: <Label basic color='purple' size='large'>{hiScoreName}</Label> <Label basic color='purple' size='large'>{hiScore}</Label></Header>
             </div>
           </Grid.Row>
           <Grid.Row columns='2' className="flexGrow">
