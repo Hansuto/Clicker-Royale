@@ -6,16 +6,23 @@ var leaderboard = [];
 
 io.on('connection', function(socket) {
   socket.on('click', function(data) {
+		
+		var parsedData = JSON.parse(data)
+		
+		console.log(parsedData)
+		
 		let obj = leaderboard.find((o, i) => {
-			if (o.name === data.toString()) {
+			if (o.name === parsedData.name) {
 					if(gameInProgress)
-						leaderboard[i] = { name: o.name, score: o.score + 1 };
+						var newScore = o.score + parsedData.increment
+						if (newScore <= 0 ) newScore = 0;
+						leaderboard[i] = { name: o.name, score: newScore };
 					return true;
 			}
 		});
 		
 		if (obj == null) {
-			leaderboard.push({"name" : data.toString(),"score" : 1,});
+			leaderboard.push({"name" : parsedData.name,"score" : 1,});
 		}
 		
 		leaderboard = leaderboard.sort((a, b) => parseFloat(b.score) - parseFloat(a.score));
@@ -61,11 +68,11 @@ setInterval(function(){
 			}
 			else {
 					console.log('******* Game Starting *******')
+					leaderboard = []
 			}
 			gameInProgress = !gameInProgress			
-			leaderboard = []
 			time = 60;
 		}
 		
-		console.log(leaderboard);
+		//console.log(leaderboard);
 }, 1000);

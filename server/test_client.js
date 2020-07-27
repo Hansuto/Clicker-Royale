@@ -3,7 +3,13 @@ var socket = io.connect('http://hansuto.ngrok.io');
 const myName = 'Chris'
 
 setInterval(function(){
-	socket.emit('click', myName);
+	var message = JSON.stringify(
+		{
+			"name" : myName,
+			"increment" : 1
+		}
+	)
+	socket.emit('click', message);
 }, 1000);
 
 socket.on('update', (data) => {
