@@ -7,6 +7,7 @@ import {
   Header,
   Modal,
   Form,
+  Label,
 } from 'semantic-ui-react';
 import Leaderboard from './components/leaderboard';
 import socketIOClient from "socket.io-client";
@@ -41,13 +42,29 @@ class App extends Component {
     else {
       this.setState({ nameOpen: false });
       this.updateSocket();
-      socket.emit('click', myName);
+      let data = JSON.stringify({
+        name: myName,
+        increment: 1,
+      });
+      socket.emit('click', data);
     }
   }
 
   handleClick = () => {
     const { myName } = this.state;
-    socket.emit('click', myName);
+    let data = JSON.stringify({
+      name: myName,
+      increment: 1,
+    });
+    socket.emit('click', data);
+  }
+
+  hurt = (name) => {
+    let data = JSON.stringify({
+      name: name,
+      increment: -1,
+    });
+    socket.emit('click', data);
   }
 
   updateSocket() {
@@ -72,7 +89,7 @@ class App extends Component {
         score = myScore;
       }
 
-      console.log(score);
+      // console.log(score);
 
       this.setState({
         gameInProgress: gameInProgress,
@@ -97,7 +114,7 @@ class App extends Component {
             <div>
               <Header textAlign='center' size='huge' color='violet'>Clicker Royale</Header>
               <Header textAlign='center'>{notifyText}</Header>
-              <Header textAlign='center'>Last Winner: {lastWinner}</Header>
+              <Header textAlign='center'>Last Winner: <Label basic color='purple' size='large'>{lastWinner}</Label></Header>
             </div>
           </Grid.Row>
           <Grid.Row columns='2' className="flexGrow">
@@ -116,7 +133,7 @@ class App extends Component {
               </Button>
             </Grid.Column>
             <Grid.Column width='6'>
-              <Leaderboard data={leaderboard} client={myName} />
+              <Leaderboard data={leaderboard} client={myName} hurt={(name) => this.hurt(name)} />
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -128,7 +145,7 @@ class App extends Component {
           <Modal.Header>What should we call you?</Modal.Header>
           <Modal.Content>
             <Form onSubmit={this.submitName}>
-              <Form.Input placeholder='Name' value={myName} onChange={this.inputChange} error={noname} fluid />
+              <Form.Input placeholder='Name' value={myName} onChange={this.inputChange} error={noname} fluid autoFocus />
               <Form.Button type='submit' color='purple' fluid>Submit</Form.Button>
             </Form>
           </Modal.Content>
