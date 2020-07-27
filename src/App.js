@@ -15,7 +15,8 @@ import Konami from 'react-konami-code';
 import { toast, ToastContainer  } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const socket = socketIOClient("localhost:8123");
+const socket = socketIOClient("https://clicker-royale-server.herokuapp.com");
+
 
 class App extends Component {
   constructor(props) {
@@ -52,7 +53,7 @@ class App extends Component {
         name: myName,
         increment: increment,
       });
-      socket.emit('click', data);
+      socket.emit('join', data);
     }
   }
 
@@ -82,9 +83,9 @@ class App extends Component {
       // console.log(response);
 
       var timeLeft = response.timeLeft;
-      var gameInProgress = response.gameInProgress;
+      var currentGameStatus = response.gameInProgress;
       var leaderboard = response.leaderboard;
-      var lastWinner = response.winner;
+      var newWinner = response.winner;
       var hiScore = response.hiScore;
       var hiScoreName = response.hiScoreName
       var score = 0;
@@ -98,14 +99,15 @@ class App extends Component {
         score = myScore;
       }
 
-      // console.log(score);
+      if (this.state.gameInProgress === true && currentGameStatus === false && leaderboard.length !== 0) 
+        toast("🎉 " + newWinner + " is the winner! 🎉");
 
       this.setState({
-        gameInProgress: gameInProgress,
+        gameInProgress: currentGameStatus,
         timeLeft: timeLeft,
         leaderboard: leaderboard,
         myScore: score,
-        lastWinner: lastWinner,
+        lastWinner: newWinner,
         hiScore: hiScore,
         hiScoreName: hiScoreName
       })
@@ -118,12 +120,17 @@ class App extends Component {
     this.setState({ increment: 10 });
   }
 
+    componentDidMount() {
+        console.log('Initializing WebSocket...')
+        this.updateSocket();
+    }
+
   render() {
     const { gameInProgress, timeLeft, myScore, leaderboard, myName, noname, nameOpen, lastWinner, hiScoreName, hiScore } = this.state;
 
     let notify = (gameInProgress) ? 'Time Remaining: ' : 'Game Starting in: ';
     let notifyText = notify + timeLeft + ' seconds';
-    let btnTxt = (!gameInProgress && myScore === 0) ? 'Join' : (gameInProgress) ? myScore : notifyText;
+    let btnTxt = (gameInProgress && myScore === 0) ? 'Click' : (gameInProgress) ? myScore : notifyText;
     return (
       <Segment className="App" style={{'userSelect': 'none'}} basic>
         <Grid centered className="flex fillHeight">
@@ -143,7 +150,7 @@ class App extends Component {
                 size='massive'
                 className="fillHeight"
                 onClick={this.handleClick}
-                disabled={!gameInProgress && myScore !== 0}
+                disabled={!gameInProgress}
               >
                 <Header size='huge' inverted>
                   {btnTxt}
