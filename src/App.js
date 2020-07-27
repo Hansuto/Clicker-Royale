@@ -12,6 +12,8 @@ import {
 import Leaderboard from './components/leaderboard';
 import socketIOClient from "socket.io-client";
 import Konami from 'react-konami-code';
+import { toast, ToastContainer  } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const socket = socketIOClient("http://hansuto.ngrok.io/");
 
@@ -106,6 +108,7 @@ class App extends Component {
 
   easterEgg = () => {
     console.log('God Mode');
+    toast("🎮 Konami Code 🎮", {pauseOnHover: false, closeOnClick: false});
     this.setState({ increment: 10 });
   }
 
@@ -116,7 +119,7 @@ class App extends Component {
     let notifyText = notify + timeLeft + ' seconds';
     let btnTxt = (!gameInProgress && myScore === 0) ? 'Join' : (gameInProgress) ? myScore : notifyText;
     return (
-      <Segment className="App" style={{'user-select': 'none'}} basic>
+      <Segment className="App" style={{'userSelect': 'none'}} basic>
         <Grid centered className="flex fillHeight">
           <Grid.Row columns='1' className="flexShrink">
             <div>
@@ -149,7 +152,7 @@ class App extends Component {
           open={nameOpen}
           size='mini'
           closeOnDimmerClick={false}
-          style={{'user-select': 'none'}}
+          style={{'userSelect': 'none'}}
         >
           <Modal.Header>What should we call you?</Modal.Header>
           <Modal.Content>
@@ -160,6 +163,7 @@ class App extends Component {
           </Modal.Content>
         </Modal>
         <Konami action={this.easterEgg}></Konami>
+        <ToastContainer />
       </Segment>
     );
   }
