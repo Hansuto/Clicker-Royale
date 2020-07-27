@@ -6,12 +6,12 @@ import {
   Button,
   Header,
   Modal,
-  Input,
+  Form,
 } from 'semantic-ui-react';
 import Leaderboard from './components/leaderboard';
 import socketIOClient from "socket.io-client";
 
-const socket = socketIOClient("http://hansuto.ngrok.io/")
+const socket = socketIOClient("http://hansuto.ngrok.io/");
 
 class App extends Component {
   constructor(props) {
@@ -51,7 +51,7 @@ class App extends Component {
   }
 
   updateSocket() {
-    const { myName } = this.state;
+    const { myName, myScore } = this.state;
 
     socket.on("update", data => {
       var response = JSON.parse(data);
@@ -61,20 +61,24 @@ class App extends Component {
       var gameInProgress = response.gameInProgress;
       var leaderboard = response.leaderboard;
       var lastWinner = response.winner;
-      var myScore = 0;
+      var score = 0;
 
 
       if (leaderboard.length !== 0) {
-        myScore = leaderboard.find(x => x.name === myName).score;
+        score = leaderboard.find(x => x.name === myName)?.score;
       }
 
-      console.log(myScore);
+      if (myScore === null) {
+        score = myScore;
+      }
+
+      console.log(score);
 
       this.setState({
         gameInProgress: gameInProgress,
         timeLeft: timeLeft,
         leaderboard: leaderboard,
-        myScore: myScore,
+        myScore: score,
         lastWinner: lastWinner,
       })
     })
@@ -87,11 +91,11 @@ class App extends Component {
     let notifyText = notify + timeLeft + ' seconds';
     let btnTxt = (!gameInProgress && myScore === 0) ? 'Join' : (gameInProgress) ? myScore : notifyText;
     return (
-      <Segment className="App">
+      <Segment className="App" basic>
         <Grid centered className="flex fillHeight">
           <Grid.Row columns='1' className="flexShrink">
             <div>
-              <Header textAlign='center' size='huge' color='violet'>Clicker Royal</Header>
+              <Header textAlign='center' size='huge' color='violet'>Clicker Royale</Header>
               <Header textAlign='center'>{notifyText}</Header>
               <Header textAlign='center'>Last Winner: {lastWinner}</Header>
             </div>
@@ -123,11 +127,11 @@ class App extends Component {
         >
           <Modal.Header>What should we call you?</Modal.Header>
           <Modal.Content>
-            <Input placeholder='Name' value={myName} onChange={this.inputChange} error={noname} fluid />
+            <Form onSubmit={this.submitName}>
+              <Form.Input placeholder='Name' value={myName} onChange={this.inputChange} error={noname} fluid />
+              <Form.Button type='submit' color='purple' fluid>Submit</Form.Button>
+            </Form>
           </Modal.Content>
-          <Modal.Actions>
-            <Button onClick={this.submitName} primary fluid>Submit</Button>
-          </Modal.Actions>
         </Modal>
       </Segment>
     );

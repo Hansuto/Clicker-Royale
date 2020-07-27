@@ -39,7 +39,7 @@ class Leaderboard extends Component {
         // className="transTable"
         size="large"
         inverted
-        color='red'
+        color='purple'
         tableData={this.props.data}
         headerRow={this.generateHeaders()}
         renderBodyRow={this.generateRow}
