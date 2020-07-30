@@ -68,6 +68,7 @@ class App extends Component {
 
   hurt = (name) => {
     const { increment } = this.state;
+    console.log('You hurt '+ name);
     let data = JSON.stringify({
       name: name,
       increment: -increment,
@@ -132,42 +133,26 @@ class App extends Component {
     let notifyText = notify + timeLeft + ' seconds';
     let btnTxt = (gameInProgress && myScore === 0) ? 'Click' : (gameInProgress) ? myScore : notifyText;
     return (
-      <Segment className="App" style={{'userSelect': 'none'}} basic>
-        <Grid centered className="flex fillHeight">
-          <Grid.Row columns='1' className="flexShrink">
-            <div>
-              <Header textAlign='center' size='huge' color='violet'>Clicker Royale</Header>
-              <Header textAlign='center'>{notifyText}</Header>
-              <Header textAlign='center'>Last Winner: <Label basic color='purple' size='large'>{lastWinner}</Label></Header>
-              <Header textAlign='center'>High Score: <Label basic color='purple' size='large'>{hiScoreName}</Label> <Label basic color='purple' size='large'>{hiScore}</Label></Header>
-            </div>
-          </Grid.Row>
-          <Grid.Row columns='2' className="flexGrow">
-            <Grid.Column width='10'>
-              <Button
-                fluid
-                color='purple'
-                size='massive'
-                className="fillHeight"
-                onClick={this.handleClick}
-                disabled={!gameInProgress}
-              >
+      <div className="App noTextSelect" basic>
+        <div>
+            <Header textAlign='center' size='huge' color='violet'>Clicker Royale</Header>
+            <Header textAlign='center'>{notifyText}</Header>
+            <Header textAlign='center'>Last Winner: <Label basic color='purple' size='large'>{lastWinner}</Label></Header>
+            <Header textAlign='center'>High Score: <Label basic color='purple' size='large'>{hiScoreName}</Label> <Label basic color='purple' size='large'>{hiScore}</Label></Header>
+        </div>
+        <div className="gameContainer">
+            <div className="clickButtonContainer">
+              <Button fluid color='purple' size='massive' className="fillHeight" onClick={this.handleClick} disabled={!gameInProgress}>
                 <Header size='huge' inverted>
                   {btnTxt}
                 </Header>
               </Button>
-            </Grid.Column>
-            <Grid.Column width='6'>
+            </div>
+            <div className="leaderboardContainer">
               <Leaderboard data={leaderboard} client={myName} hurt={(name) => this.hurt(name)} />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-        <Modal
-          open={nameOpen}
-          size='mini'
-          closeOnDimmerClick={false}
-          style={{'userSelect': 'none'}}
-        >
+            </div>
+        </div>
+        <Modal open={nameOpen} size='mini' closeOnDimmerClick={false} className="noTextSelect">
           <Modal.Header>What should we call you?</Modal.Header>
           <Modal.Content>
             <Form onSubmit={this.submitName}>
@@ -178,7 +163,7 @@ class App extends Component {
         </Modal>
         <Konami action={this.easterEgg}></Konami>
         <ToastContainer />
-      </Segment>
+      </div>
     );
   }
 }

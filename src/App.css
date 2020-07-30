@@ -4,7 +4,48 @@ body {
 
 .App {
   text-align: center;
-  height: 100vh;
+}
+
+.noTextSelect {
+    user-select: none
+}
+
+.gameContainer {
+    display: flex; 
+    margin-top: 15px; 
+    height: 75vh;
+    flex-direction: row
+}
+
+.clickButtonContainer {
+    width:50%; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    margin: 10px
+}
+
+.leaderboardContainer {
+    width:50%; 
+    overflow-y: scroll; 
+    display: flex; 
+    justify-content: center; 
+    margin: 10px
+}
+
+@media (max-width: 800px) {
+    .gameContainer {   
+        flex-direction: column !important;
+        height: 65vh !important;
+    }
+
+    .clickButtonContainer {
+        width:97% !important; 
+    }
+
+    .leaderboardContainer {
+        width:97% !important; 
+    }
 }
 
 .fillHeight {
