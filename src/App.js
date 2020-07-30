@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
 import {
-  Grid,
-  Segment,
   Button,
   Header,
   Modal,
@@ -133,7 +131,7 @@ class App extends Component {
     let notifyText = notify + timeLeft + ' seconds';
     let btnTxt = (gameInProgress && myScore === 0) ? 'Click' : (gameInProgress) ? myScore : notifyText;
     return (
-      <div className="App noTextSelect" basic>
+      <div className="App noTextSelect">
         <div>
             <Header textAlign='center' size='huge' color='violet'>Clicker Royale</Header>
             <Header textAlign='center'>{notifyText}</Header>
